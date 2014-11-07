@@ -1,3 +1,5 @@
+-- Extracting the Repositories with more than 1000 stars
+
 SELECT repo_last_events.repository_url AS repository_url,
 repo_languages_watchers.repository_language AS repository_language,
 repo_languages_watchers.repository_watchers AS repository_watchers

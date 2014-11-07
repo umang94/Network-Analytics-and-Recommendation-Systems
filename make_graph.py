@@ -1,14 +1,23 @@
-import igraph,csv;
+#!/usr/bin/env python
+import csv
+import igraph
 
-newGraph = igraph.Graph()
+g = igraph.Graph()
 
-def add_node():
-  global  newGraph
-  with open('data/results-20141004-141029.csv') as repository_data:
-    data = csv.DictReader(repository_data)
-    for repository in data:
-      newGraph.add_vertex(name=repository['repository_url'],label=repository['repository_url'][19:],language=repository['repository_language'],watchers=int(repository['repository_watchers']))
-        
-add_node()
-print newGraph.summary()
-newGraph.write("output.gml")
+with open('data/repo-attributes.csv', 'rb') as repofile:
+    reader = csv.DictReader(repofile)
+    for repo in reader:
+        g.add_vertex(name=repo['repository_url'],
+            label=repo['repository_url'][19:],
+            language='(unknown)' if repo['repository_language'] == 'null'
+                else repo['repository_language'],
+            watchers=int(repo['repository_watchers']))
+
+with open('data/repo-weights.csv', 'rb') as edgefile:
+    reader = csv.DictReader(edgefile)
+    for edge in reader:
+        g.add_edge(edge['repository1'], edge['repository2'],
+            weight=float(edge['weight']))
+
+print g.summary()
+g.write('graph.gml')
