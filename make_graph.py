@@ -20,4 +20,5 @@ with open('data/repo-weights.csv', 'rb') as edgefile:
             weight=float(edge['weight']))
 
 print g.summary()
+#igraph.plot(g)
 g.write('graph.gml')
