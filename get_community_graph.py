@@ -2,6 +2,10 @@ import igraph
 import sys
 import getopt
 
+# Function to load the nodes and edges from the csv file genrated by google big query
+# and making a igraph object out of it. This igraph object has all the nodes and edges of the 
+# whole graph
+
 def load_graph_from_csv(filename):
   g = igraph.Graph()
   with open('repo-attributes.csv', 'rb') as repofile:
@@ -21,6 +25,8 @@ def load_graph_from_csv(filename):
       
   return g
 
+#Iterative functions for calculating the number of unique languages present in the whole dataset
+
 def language_stats(graph):
   language_count = {}
   for node in graph.vs:
@@ -31,12 +37,15 @@ def language_stats(graph):
       language_count[language] += 1
   return language_count
 
+# Function to output the results of community detection algorithms and printing them ot to the console 
 def display_statistics(filename):
   graph = load_graph(filename)
   statistics = language_stats(graph)
   print "Language".rjust(20) , "Sub Graph Size".rjust(20)
   for key, value in statistics.iteritems():
     print key.rjust(20) , str(value).rjust(20) 
+
+# Fucntion for running the fast greedy community algorithm and clustering 
 
 def getting_communities(graph):
   communities = graph.community_fastgreedy()
@@ -48,10 +57,12 @@ def getting_communities(graph):
     for id in cluster :
       print "Cluster ID : ", count , " Node : ",  graph.vs[id]['name'], " Language : " , graph.vs[id]['language']
 
+# Function for loading previously saved graph data in gml files
 def load_graph(filename):
   g = igraph.read(filename)
   return g
 
+# Function for returning all the nodes of a given language
 def get_language_nodes(graph, language):
   language_nodes = []
   for node in graph.vs:
@@ -60,6 +71,9 @@ def get_language_nodes(graph, language):
   return language_nodes
 
 complete_graph = load_graph("graph.gml")
+
+#Function for genrating complete graph for a particular language from the previously extracted nodes
+#of that language
 
 def generate_community_graph(complete_graph, language_nodes):
   community_graph = igraph.Graph()
@@ -116,13 +130,23 @@ def generate_community_graph(complete_graph, language_nodes):
 
   
 def initializer(language, filename):
+  print "Running initializer"
   complete_graph = load_graph(filename)
-  language_nodes = get_language_nodes(complete_graph, language)
-  community_graph = generate_community_graph(complete_graph,language_nodes)
-  output = language + ".gml"
+  #language_nodes = get_language_nodes(complete_graph, language)
+  #community_graph = generate_community_graph(complete_graph,language_nodes)
+  #output = "Communities/" + language + ".gml"
+  #print "Trying to get communities"
   #getting_communities(complete_graph)
-  print language_stats(complete_graph)
-  community_graph.write(output)
+  #community_graph.write(output)
+
+  
+  for key in language_stats(complete_graph):
+      print "Generating community graph for %r Community ... "%(key)
+      current_language_nodes = get_language_nodes(complete_graph, key)
+      community_graph = generate_community_graph(complete_graph, current_language_nodes)
+      output = "Communities/" + key + ".gml"
+      community_graph.write(output)
+  print "Community Graph Generation for communities done"
   #layout = complete_graph.layout_fruchterman_reingold()
   #igraph.plot(community_graph,layout=layout, vertex_label = None, vertex_size = 5)
   
@@ -144,6 +168,14 @@ def initializer(language, filename):
 def main():
   has_file = False
   display_stats = False
+  filename = sys.argv[2]
+  language = sys.argv[4]
+  display_stats = sys.argv[6]
+  print filename, language, display_stats
+  
+  initializer(language, filename)
+
+  """
   try:
     opts, args = getopt.getopt(sys.argv[1:],"hf:l:s:",["help","filename","language","statistics"])
   except getopt.GetoptError as err:
@@ -168,22 +200,11 @@ def main():
             if has_file:
               display_statistics(filename)
               sys.exit()
+      initializer(language, filename)
 
-#  elif len(opts) == 3:
- #   for opt , arg in opts:
-  #    if opt in ("-s", "--statistics"):
-   #     display_stats = True
-    #    if has_file :
-     #     display_statistics(filename)
-      #    sys.exit()
-      #if opt in ("-f", "--filename"):
-       # has_file = True
-        #if display_stats:
-         # display_statistics(filename)
-          #sys.exit() """
   else:
       print "Usage : python get_community_graph.py -f <complete_graph_filename> -l <language> -s <Optional Language Statistics>"
       sys.exit()
-  
-  initializer(language,filename)
+  """
+  #initializer(language,filename)
 main()
