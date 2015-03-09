@@ -8,7 +8,7 @@ import getopt
 
 def load_graph_from_csv(filename):
   g = igraph.Graph()
-  with open('repo-attributes.csv', 'rb') as repofile:
+  with open('raw_data/repo-attributes.csv', 'rb') as repofile:
     reader = csv.DictReader(repofile)
     for repo in reader:
         g.add_vertex(name=repo['repository_url'],
@@ -17,7 +17,7 @@ def load_graph_from_csv(filename):
                 else repo['repository_language'],
             watchers=int(repo['repository_watchers']))
 
-  with open('repo-weights.csv', 'rb') as edgefile:
+  with open('raw_data/repo-weights.csv', 'rb') as edgefile:
     reader = csv.DictReader(edgefile)
     for edge in reader:
       g.add_edge(edge['repository1'], edge['repository2'],
@@ -83,13 +83,13 @@ def generate_community_graph(complete_graph, language_nodes):
     try:
       community_graph.vs.find(name=node['name'])
     except KeyError:
-      print "Adding Node : ", node['name'] , " Language : " , node['language']
+      #print "Adding Node : ", node['name'] , " Language : " , node['language']
       community_graph.add_vertex(name = node['name'],
           label = node['label'],
           language = node['language'],
           watchers = node['watchers'])
     except ValueError:
-      print "Adding Node : ", node['name'] , " Langauge : " , node['language']
+      #print "Adding Node : ", node['name'] , " Langauge : " , node['language']
       community_graph.add_vertex(name = node['name'],
           label = node['label'],
           language = node['language'],
@@ -104,7 +104,7 @@ def generate_community_graph(complete_graph, language_nodes):
       try:
         community_graph.vs.find(name=current_node['name'])
       except KeyError:
-        print "Adding Node : ", current_node['name'] , " Language : " , current_node['language']
+        #print "Adding Node : ", current_node['name'] , " Language : " , current_node['language']
         community_graph.add_vertex(name = current_node['name'],
           label = node['label'],
           language = node['language'],
@@ -123,30 +123,22 @@ def generate_community_graph(complete_graph, language_nodes):
           ed_weight = 1
         else:
           ed_weight = ed_weight[0]
-        print "Adding Edge - Weight : " , ed_weight , " Source : ", node['name'] , " Target : ", current_node['name']
+        #print "Adding Edge - Weight : " , ed_weight , " Source : ", node['name'] , " Target : ", current_node['name']
         community_graph.add_edge(node['name'],current_node['name'],weight=ed_weight)
 
   return community_graph
 
   
-def initializer(language, filename):
-  print "Running initializer"
+def initializer(filename):
   complete_graph = load_graph(filename)
-  #language_nodes = get_language_nodes(complete_graph, language)
-  #community_graph = generate_community_graph(complete_graph,language_nodes)
-  #output = "Communities/" + language + ".gml"
-  #print "Trying to get communities"
-  #getting_communities(complete_graph)
-  #community_graph.write(output)
-
-  
   for key in language_stats(complete_graph):
       print "Generating community graph for %r Community ... "%(key)
       current_language_nodes = get_language_nodes(complete_graph, key)
       community_graph = generate_community_graph(complete_graph, current_language_nodes)
       output = "Communities/" + key + ".gml"
       community_graph.write(output)
-  print "Community Graph Generation for communities done"
+  print "\nCommunity Graph Generation for communities done with 0 errors"
+
   #layout = complete_graph.layout_fruchterman_reingold()
   #igraph.plot(community_graph,layout=layout, vertex_label = None, vertex_size = 5)
   
@@ -169,11 +161,10 @@ def main():
   has_file = False
   display_stats = False
   filename = sys.argv[2]
-  language = sys.argv[4]
-  display_stats = sys.argv[6]
-  print filename, language, display_stats
+  #language = sys.argv[4]
+  #display_stats = sys.argv[6]
   
-  initializer(language, filename)
+  initializer(filename)
 
   """
   try:
