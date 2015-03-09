@@ -1,4 +1,5 @@
 data/repo-attributes.csv
+*.gml
 *.swp
 .RData
 .Rhistory
