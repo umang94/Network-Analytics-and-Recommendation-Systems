@@ -3,3 +3,4 @@ data/repo-attributes.csv
 *.swp
 .RData
 .Rhistory
+Communities/
