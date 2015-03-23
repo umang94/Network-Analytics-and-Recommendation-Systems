@@ -72,6 +72,7 @@ def get_language_nodes(graph, language):
 
 complete_graph = load_graph("graph.gml")
 
+
 #Function for genrating complete graph for a particular language from the previously extracted nodes
 #of that language
 
@@ -128,6 +129,9 @@ def generate_community_graph(complete_graph, language_nodes):
 
   return community_graph
 
+def recommender(community_graph):
+    for node in community_graph:
+        print node['id']
   
 def initializer(filename):
   complete_graph = load_graph(filename)

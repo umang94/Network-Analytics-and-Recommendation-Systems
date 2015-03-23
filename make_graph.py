@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+""" Code for reading raw table data from the csv file and making the complete graph file and dumping it into a gml file for further use of commuity extraxtion"""
 import csv
 import igraph
 
