@@ -17,6 +17,22 @@ def search_node(query_repository, language_graph):
             return node
     return None
 
+# Function for filtering out the top watched repositories which do not have any edges. This is for adding granularity to the recommendations
+
+def indepedent_suggestions(language_graph, number):
+    repo_watcher_map = {}
+    for node in language_graph.vs : 
+        if len(node.neighbors()) == 0 :
+            repo_watcher_map[node['label']] = node['watchers']
+    top_repos = sorted(repo_watcher_map.items(), key=lambda e: e[1], reverse=True)[0:20]
+    random.shuffle(top_repos)
+    suggestions = []
+    for key,value in top_repos:
+        suggestions.append(key)
+    return suggestions[0:number]
+
+#Function for returning recommendations on the basis of pagerank of all nodes
+
 def far_off_suggestions(language_graph, number): 
     page_ranks = language_graph.pagerank()
     pagerank_map = {}
@@ -36,12 +52,14 @@ def far_off_suggestions(language_graph, number):
 
 def make_json(suggestions):
     suggestions_map = {}
-    for rank in range(1,11):
+    for rank in range(1,len(suggestions)):
         suggestions_map[rank] = suggestions[rank-1]
     suggestions_json = json.dumps(suggestions_map)
-    print suggestions_json
+    return suggestions_json
 
 # Main recommender function that calls all the other auxillarily recommendor functions
+    # Suggestions comprise of upto 10 nodes in the order 2 immediate neighborhood, upto 5 
+    # far off suggestions and upto 5 independent node suggestions
 def recommender(query_repository , language):
     
     #Loading the given language file
@@ -59,31 +77,28 @@ def recommender(query_repository , language):
     neighborhood_node_ids = language_graph.neighborhood(int(root_node['id']),order=2)
 
     #Fetching suggested repository names and appendings suggestions rank wise
+    
 
     suggestions = []
     for id in neighborhood_node_ids : 
         suggestions.append(language_graph.vs[id]['name'])
-    if len(suggestions) < 10:
-        suggestions = suggestions + far_off_suggestions(language_graph, 10-len(suggestions))
+    suggestions = suggestions[0:10] + far_off_suggestions(language_graph, 5) + indepedent_suggestions(language_graph, 5)
 
-    for suggestion in suggestions:
-        print suggestion
-    
+    return make_json(suggestions)
 
-    make_json(suggestions)
-    #ranks = community_graph.personalized_pagerank()
-    #print sorted(ranks)
-    #for node in community_graph.vs:
-    #    if len(node.neighbors()) > 0 : print len(node.neighbors())
 
-print "\t\tFor a independent node"
-recommender("treeio/treeio","Python")
+def main():
+    # python recommender.py -r pydata/pandas -l Python
+    input_repository = sys.argv[2]
+    input_language = sys.argv[4]
+    print recommender(sys.argv[2], sys.argv[4].capitalize())
 
-print "\t\tFor a connected node"
-recommender("pydata/pandas", "Python")
+main()
 
-print "\t\tFor a C++ independent node"
-recommender("facebook/folly", "C++")
 
-print "\t\tFor a C++ connected node"
-recommender("facebook/hhvm", "C++")
+### Sample example commands for demonstration
+"""
+    python recommender.py -r pydata/pandas -l python
+    python recommender.py -r facebook/folly -l c++
+    python recommender.py -r facebook/hhvm -l C++ 
+"""
