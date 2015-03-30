@@ -1,0 +1,14 @@
+{
+	"name": "ReccoEngine",
+	"version":"0.0.1",
+	"private" : "true",
+	"description":"A Node.js App for giving the user a frontend for recommendation system",
+	"repository":{
+		"type":"git",
+		"url":"git://github.com/umang94/Network-Analytics-and-Recommendation-Systems.git"
+	},
+	"dependencies":{
+		"express":"~4.0.0"
+	},
+	"engine":"node >=0.6.x"
+}
