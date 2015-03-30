@@ -63,7 +63,7 @@ def make_json(suggestions):
 def recommender(query_repository , language):
     
     #Loading the given language file
-    language_file = "Communities/" + language + ".gml"
+    language_file = "/Users/umang/Desktop/MTP/Code/Communities/" + language + ".gml"
     language_graph = load_graph(language_file)
 
     #Searching the given repository in the logs
