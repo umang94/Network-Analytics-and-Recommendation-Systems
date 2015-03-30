@@ -5,3 +5,5 @@ data/repo-attributes.csv
 .Rhistory
 Communities/
 visualisations/
+frontend/node_modules
+frontend/npm-debug.log
