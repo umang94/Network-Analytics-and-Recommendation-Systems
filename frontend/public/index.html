@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>github recommendations</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <style type="text/css">
+      body { padding-top: 50px; }
+      .my-body { padding: 40px 15px; }
+      i.fa-spin { display: none; }
+      button[disabled] i.fa-spin { display: inline; }
+      .item { margin: 8px; display: inline-block; }
+      .item a { padding: 8px; line-height: 25px; background: #eee; border-radius: 3px; }
+      .recommendations { text-align: center; }
+    </style>
+  </head>
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">github recommendations</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="my-body">
+
+	<form class="form-inline">
+	  <div class="form-group">
+	    <label for="language">Language</label>
+	    <input type="text" class="form-control language" value="Python">
+	  </div>
+	  <div class="form-group" style="margin-left: 20px">
+	    <label for="language">Repository</label>
+	    <input type="text" class="form-control repository" value="pydata/pandas">
+	  </div>
+	  <button type="submit" class="btn btn-primary" style="margin-left: 40px">
+	    <i class="fa fa-spin fa-spinner"></i>
+	    Get Recommendations
+    	  </button>
+	</form>
+
+	<hr>
+
+	<div class="recommendations">
+	</div>
+      </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/fetch.js"></script>
+    <script>
+      function recoTemplate(recoURL) {
+	var reco = recoURL.substr(19);
+	return "<div class='item'><a href='" + recoURL + "'>" + reco + "</a></div>";
+      }
+
+      $("form").submit(function() {
+        $("button").attr('disabled', 'disabled');
+	var language = $(".language").val(),
+	    repository = $(".repository").val();
+	console.log("lang: " + language + ", repo: " + repository);
+
+	fetch('/', {
+	  method: 'post',
+	  headers: {
+	    'Accept': 'application/json',
+	    'Content-Type': 'application/json'
+	  },
+          body: JSON.stringify({
+	    language: language,
+	    repository: repository
+	  })
+	}).then(function(response) {
+	  response.json().then(function(json) {
+	    $("button").attr('disabled', false);
+	    $(".recommendations").html("");
+	    json.forEach(function(recoURL) {
+	      var reco = recoURL.substr(19);
+	      $(".recommendations").append(recoTemplate(recoURL));
+            });
+	    console.log(json);
+	  });
+	}).catch(function(error) {
+	  console.log("request failed", error);
+	  $("button").attr('disabled', false);
+        });
+
+        return false;
+      });
+    </script>
+
+  </body>
+</html>
