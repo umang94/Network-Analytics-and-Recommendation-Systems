@@ -5,7 +5,7 @@ import igraph
 
 g = igraph.Graph()
 
-with open('repo-attributes.csv', 'rb') as repofile:
+with open('raw_data/repo-attributes.csv', 'rb') as repofile:
     reader = csv.DictReader(repofile)
     for repo in reader:
         g.add_vertex(name=repo['repository_url'],
@@ -14,7 +14,7 @@ with open('repo-attributes.csv', 'rb') as repofile:
                 else repo['repository_language'],
             watchers=int(repo['repository_watchers']))
 
-with open('repo-weights.csv', 'rb') as edgefile:
+with open('raw_data/repo-weights.csv', 'rb') as edgefile:
     reader = csv.DictReader(edgefile)
     for edge in reader:
         g.add_edge(edge['repository1'], edge['repository2'],
@@ -61,4 +61,4 @@ print matrix[1725][1715]
 #print len(membership)
 #print clusters[0], clusters[1]
 #print max(communities.as_clustering().membership)
-#g.write('graph.gml')
+g.write('graph.gml')

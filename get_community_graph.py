@@ -15,7 +15,8 @@ def load_graph_from_csv(filename):
             label=repo['repository_url'][19:],
             language='(unknown)' if repo['repository_language'] == 'null'
                 else repo['repository_language'],
-            watchers=int(repo['repository_watchers']))
+            watchers=int(repo['repository_watchers']),
+            description = repo['repository_description'])
 
   with open('raw_data/repo-weights.csv', 'rb') as edgefile:
     reader = csv.DictReader(edgefile)
@@ -59,6 +60,7 @@ def getting_communities(graph):
 
 # Function for loading previously saved graph data in gml files
 def load_graph(filename):
+  print filename
   g = igraph.read(filename)
   return g
 
@@ -88,13 +90,17 @@ def generate_community_graph(complete_graph, language_nodes):
       community_graph.add_vertex(name = node['name'],
           label = node['label'],
           language = node['language'],
-          watchers = node['watchers'])
+          watchers = node['watchers'],
+          #description = node['description']
+          )
     except ValueError:
       #print "Adding Node : ", node['name'] , " Langauge : " , node['language']
       community_graph.add_vertex(name = node['name'],
           label = node['label'],
           language = node['language'],
-          watchers = node['watchers'])
+          watchers = node['watchers'],
+          #description = node['description']
+          )
     neighbour_nodes = complete_graph.neighborhood(int(node['id']))
     
     for node_id in neighbour_nodes:
@@ -109,12 +115,16 @@ def generate_community_graph(complete_graph, language_nodes):
         community_graph.add_vertex(name = current_node['name'],
           label = node['label'],
           language = node['language'],
-          watchers = node['watchers'])
+          watchers = node['watchers'],
+          #description = node['description']
+          )
       except ValueError:
         community_graph.add_vertex(name = current_node['name'],
             label = current_node['label'],
             language = node['language'],
-            watchers = node['watchers'])
+            watchers = node['watchers'],
+            #description = node['description']
+            )
 
       #Adding an edge
       if node['id']  != current_node['id']:
