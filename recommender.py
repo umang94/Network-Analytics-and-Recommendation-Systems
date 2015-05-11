@@ -23,7 +23,7 @@ def indepedent_suggestions(language_graph, number):
     repo_watcher_map = {}
     for node in language_graph.vs : 
         if len(node.neighbors()) == 0 :
-            repo_watcher_map[node['label']] = node['watchers']
+            repo_watcher_map[node['name']] = node['watchers']
     top_repos = sorted(repo_watcher_map.items(), key=lambda e: e[1], reverse=True)[0:20]
     random.shuffle(top_repos)
     suggestions = []
@@ -84,7 +84,7 @@ def recommender(query_repository , language):
         suggestions.append(language_graph.vs[id]['name'])
     suggestions = suggestions[0:10] + far_off_suggestions(language_graph, 5) + indepedent_suggestions(language_graph, 5)
 
-    return make_json(suggestions)
+    return json.dumps(suggestions)
 
 
 def main():
