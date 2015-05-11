@@ -1,7 +1,7 @@
 #!usr/bin/env python
 
 """ Code for generating developer graph by reading raw_data from a csv file """ 
-import csv, igraph
+import csv, igraph, math
 
 g = igraph.Graph()
 
@@ -10,7 +10,7 @@ repo_developer_map = {}
 # Code for extracting deelopers and adding unique nodes correspoding to each developer into the graph
 
 developers_set = set()
-with open('developer_data/Python.csv', 'rb') as devfile:
+with open('developer_data/C++.csv', 'rb') as devfile:
     reader = csv.DictReader(devfile)
     for dev in reader:
         if dev['actor_attributes_name'] not in developers_set:
@@ -35,9 +35,16 @@ print "Node generation complete ... "
 print "Repository Developer Map genration complete ..." 
 print "Starting Edge Generation ..."
 
-#for repsoitory, developers in repo_developer_map.items():
-#    for developer, contribution in developers.items():
- 
+#adding edges in the developer graph
+for repsoitory, developers in repo_developer_map.items():
+    current_set = developers.items()
+    for index1 in range(0,len(current_set)-1):
+        for index2 in range(index1+1, len(current_set)):
+            edge_weight = math.sqrt(current_set[index1][1] * current_set[index2][1])
+            g.add_edge(current_set[index1][0], current_set[index2][0],weight=edge_weight)
+    #for developer, contribution in developers.items():
+
+
 #igraph.plot(g)
 
 
@@ -47,6 +54,6 @@ print "Starting Edge Generation ..."
 
 
 
-#g.write("Python.gml")
+g.write("C++.gml")
 
 
