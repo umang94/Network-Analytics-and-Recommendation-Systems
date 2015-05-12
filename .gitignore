@@ -3,7 +3,7 @@ data/repo-attributes.csv
 *.swp
 .RData
 .Rhistory
-Communities/
+Communities/*.gml
 visualisations/
 frontend/node_modules
 frontend/npm-debug.log
