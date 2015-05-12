@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>github recommendations</title>
+    <title>GitHub recommendations</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -10,9 +10,9 @@
       .my-body { padding: 40px 15px; }
       i.fa-spin { display: none; }
       button[disabled] i.fa-spin { display: inline; }
-      .item { margin: 8px; display: inline-block; }
+      /*.item { margin: 8px; display: inline-block; }
       .item a { padding: 8px; line-height: 25px; background: #eee; border-radius: 3px; }
-      .recommendations { text-align: center; }
+      .recommendations { text-align: center; }*/
     </style>
   </head>
   <body>
@@ -20,7 +20,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">github recommendations</a>
+          <a class="navbar-brand" href="#">GitHub recommendations</a>
         </div>
       </div>
     </div>
@@ -30,11 +30,11 @@
 
 	<form class="form-inline">
 	  <div class="form-group">
-	    <label for="language">Language</label>
+	    <label for="language">Language Desired</label>
 	    <input type="text" class="form-control language" value="Python">
 	  </div>
 	  <div class="form-group" style="margin-left: 20px">
-	    <label for="language">Repository</label>
+	    <label for="language">Repository worked upon</label>
 	    <input type="text" class="form-control repository" value="pydata/pandas">
 	  </div>
 	  <button type="submit" class="btn btn-primary" style="margin-left: 40px">
@@ -45,8 +45,8 @@
 
 	<hr>
 
-	<div class="recommendations">
-	</div>
+	<ol class="recommendations">
+	</ol>
       </div>
     </div>
 
@@ -57,7 +57,7 @@
     <script>
       function recoTemplate(recoURL) {
 	var reco = recoURL.substr(19);
-	return "<div class='item'><a href='" + recoURL + "'>" + reco + "</a></div>";
+	return "<li class='item'><a href='" + recoURL + "'>" + reco + "</a></li>";
       }
 
       $("form").submit(function() {
