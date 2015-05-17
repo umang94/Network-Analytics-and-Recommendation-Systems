@@ -3,13 +3,14 @@
 """ Code for generating developer graph by reading raw_data from a csv file """ 
 import csv, igraph, math, time
 
-g = igraph.Graph()
+
 
 
 # Code for extracting deelopers and adding unique nodes correspoding to each developer into the graph
 
 def construct_graph(language):
     start = time.clock()
+    g = igraph.Graph()
     repo_developer_map = {}
     developers_set = set()
     raw_file = 'developer_data/' + language + '.csv'
@@ -56,7 +57,7 @@ def construct_graph(language):
 # Code for processing the information regarding edges in the graph 
 
 
-    output_file = language + '.gml'
+    output_file = 'developer_graphs/' + language + '.gml'
     g.write(output_file)
     end = time.clock()
     print output_file , "Written", '\t\t\t', end-start , 'seconds'
@@ -64,12 +65,12 @@ def construct_graph(language):
 
 #Automation for creating developer graphs of the language communities 
 
-#languages = ['ActionScript', 'Assembly', 'C', 'C#', 'C++', 'Clojure', 'CoffeeScript', 'Dart', 
-#        'Elixir', 'Emacs Lisp' , 'Erlang' , 'Go' , 'Groovy' , 'Haskell' , 'Java' , 'JavaScript',
-#        'Julia', 'Matlab', 'Objective-C', 'OCaml' , 'Perl', 'PHP', 'PowerShell', 'Python', 'Ruby',
-#        'Rust', 'Scala', 'Shell', 'Vala', 'VimL', 'Visual Basic']
+languages = ['ActionScript', 'Assembly', 'C', 'C#', 'C++', 'Clojure', 'CoffeeScript', 'Dart', 
+        'Elixir', 'Emacs Lisp' , 'Erlang' , 'Go' , 'Groovy' , 'Haskell' , 'Java' , 'JavaScript',
+        'Julia', 'Matlab', 'Objective-C', 'OCaml' , 'Perl', 'PHP', 'PowerShell', 'Python', 'Ruby',
+        'Rust', 'Scala', 'Shell', 'Vala', 'VimL', 'Visual Basic']
 
-#for language in languages:
-#    construct_graph(language)
+for language in languages:
+    construct_graph(language)
 
-construct_graph('VimL')
+#construct_graph('VimL')
