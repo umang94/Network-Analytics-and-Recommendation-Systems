@@ -36,10 +36,6 @@ def indepedent_suggestions(language_graph, number):
 def far_off_suggestions(language_graph, number): 
     page_ranks = language_graph.pagerank()
     pagerank_map = {}
-    #for index in range(len(page_ranks)) : 
-    #    pagerank_map[index] = [page_ranks[index],language_graph.vs[index]['watchers']]
-    #x = sorted(pagerank_map.items(), key=lambda e: e[1][0], reverse=True)
-    #print x
     for index in range(len(page_ranks)):
         pagerank_map[index] = page_ranks[index]
     top_repos = sorted(pagerank_map.items(),key=lambda e: e[1], reverse=True)[0:25]
@@ -77,8 +73,6 @@ def recommender(query_repository , language):
     neighborhood_node_ids = language_graph.neighborhood(int(root_node['id']),order=2)
 
     #Fetching suggested repository names and appendings suggestions rank wise
-    
-
     suggestions = []
     for id in neighborhood_node_ids : 
         suggestions.append(language_graph.vs[id]['name'])
