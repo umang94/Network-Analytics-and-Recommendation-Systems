@@ -18,8 +18,20 @@ def search_node(developer_username,developer_graph):
 def independent_suggestions(developer_graph,number):
     independent_developers = []
     for node in developer_graph.vs:
+        Name = node['name']
+        Email = node['email']
+        Username = node['label']
         if len(node.neighbors()) == 0 and node['email'] != 'null':
-           independent_developers.append([node['name'],node['email'],node['label']])
+            if Name == '' or Name == 'null':
+                Name = "Not Available"
+            if Email == '' or Email == 'null':
+                Email = "Not Available"
+            if Username == '' or Username == 'null':
+                ProfileLink = "Not Available"
+            else:
+                ProfileLink = "github.com/" + Username 
+
+            independent_developers.append([Name,Email,ProfileLink])
     random.shuffle(independent_developers)
     return independent_developers[0:number]
 
@@ -34,7 +46,18 @@ def ranked_suggestions(developer_graph,number):
     top_developers = sorted(pagerank_map.items(), key=lambda e:e[1], reverse=True)
     suggestions = []
     for id in top_developers:
-        suggestions.append([developer_graph.vs[id]['name'], developer_graph.vs[id]['email'], developer_graph.vs[id]['label']])
+        Name = developer_graph.vs[id]['name'][0]
+        Email = developer_graph.vs[id]['email'][0]
+        Username = developer_graph.vs[id]['label'][0]
+        if Name == '' or Name == 'null':
+            Name = "Not Available"
+        if Email == '' or Email == 'null':
+            Email = "Not Available"
+        if Username == '' or Username == 'null':
+            ProfileLink = "Not Available"
+        else:
+            ProfileLink = "github.com/" + Username 
+        suggestions.append([Name, Email, ProfileLink])
     return suggestions[0:number]
 
 
@@ -53,8 +76,19 @@ def recommender(developer_username, language):
 
     suggestions = []
     for id in neighbors_node_ids:
-        suggestions.append([developer_graph.vs[id]['name'],developer_graph.vs[id]['email'], developer_graph.vs[id]['label']])
-        suggestions = suggestions[0:10] + ranked_suggestions(developer_graph,5) + independent_suggestions(developer_graph, 5)
+        Name = developer_graph.vs[id]['name']
+        Email = developer_graph.vs[id]['email']
+        Username = developer_graph.vs[id]['label']
+        if Name == '' or Name == 'null':
+            Name = 'Not Available'
+        if Email == '' or Email == 'null':
+            Email = 'Not Available'
+        if Username == '' or Username == 'null' : 
+            ProfileLink = 'Not Available'
+        else:
+            ProfileLink = 'github.com/' + Username
+        suggestions.append([Name, Email, ProfileLink])
+    suggestions = suggestions[0:10] + ranked_suggestions(developer_graph,5) + independent_suggestions(developer_graph, 5)
 
     return json.dumps(suggestions)
 
