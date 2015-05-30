@@ -92,6 +92,19 @@ def recommender(developer_username, language):
 
     return json.dumps(suggestions)
 
-print recommender("grayj",'Python')
+def main():
+    input_developer = sys.argv[2]
+    input_language = sys.argv[4]
+    print recommender(sys.argv[2],sys.argv[4].capitalize())
+
+main()
+
+### Sample example commands for demonstration
+"""
+    python dev_recommender.py -u vikhyat -l Ruby
+    python dev_recommender.py -u Fronx -l JavaScript
+    python dev_recommender.py -u Liang -l C++
+
+"""
 
 
