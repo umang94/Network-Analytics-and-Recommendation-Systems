@@ -1,6 +1,14 @@
 import igraph
 import random,sys
-import json
+import json, csv
+
+def load_description(filename):
+    reader = csv.reader(open(filename, 'rb'))
+    description_map = dict(x for x in reader)
+    return description_map
+
+global description_map 
+description_map = load_description('descriptions/description_map.csv')
 
 def load_graph(filename):
     g = igraph.read(filename)
@@ -20,6 +28,7 @@ def search_node(query_repository, language_graph):
 # Function for filtering out the top watched repositories which do not have any edges. This is for adding granularity to the recommendations
 
 def indepedent_suggestions(language_graph, number):
+    global description_map
     repo_watcher_map = {}
     for node in language_graph.vs : 
         if len(node.neighbors()) == 0 :
@@ -28,7 +37,8 @@ def indepedent_suggestions(language_graph, number):
     random.shuffle(top_repos)
     suggestions = []
     for key,value in top_repos:
-        suggestions.append(key)
+        description = description_map[key[19:]]
+        suggestions.append([key,description])
     return suggestions[0:number]
 
 #Function for returning recommendations on the basis of pagerank of all nodes
@@ -42,7 +52,9 @@ def far_off_suggestions(language_graph, number):
     random.shuffle(top_repos)
     suggestions = []
     for id in top_repos:
-        suggestions.append(language_graph.vs[id]['name'][0])
+        name = language_graph.vs[id]['name'][0]
+        description = description_map[name[19:]]
+        suggestions.append([name,description])
     return suggestions[0:number]
 
 
@@ -75,7 +87,9 @@ def recommender(query_repository , language):
     #Fetching suggested repository names and appendings suggestions rank wise
     suggestions = []
     for id in neighborhood_node_ids : 
-        suggestions.append(language_graph.vs[id]['name'])
+        name = language_graph.vs[id]['name']
+        description = description_map[name[19:]]
+        suggestions.append([name,description])
     suggestions = suggestions[0:10] + far_off_suggestions(language_graph, 5) + indepedent_suggestions(language_graph, 5)
 
     return json.dumps(suggestions)
