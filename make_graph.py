@@ -2,8 +2,11 @@
 """ Code for reading raw table data from the csv file and making the complete graph file and dumping it into a gml file for further use of commuity extraxtion"""
 import csv
 import igraph
+import json
 
 g = igraph.Graph()
+
+description_map = {}
 
 with open('raw_data/repo-attributes.csv', 'rb') as repofile:
     reader = csv.DictReader(repofile)
@@ -13,6 +16,10 @@ with open('raw_data/repo-attributes.csv', 'rb') as repofile:
             language='(unknown)' if repo['repository_language'] == 'null'
                 else repo['repository_language'],
             watchers=int(repo['repository_watchers']))
+        description = repo['repository_description']
+        label = repo['repository_url'][19:]
+        description_map[label] = description
+
 
 with open('raw_data/repo-weights.csv', 'rb') as edgefile:
     reader = csv.DictReader(edgefile)
@@ -21,6 +28,11 @@ with open('raw_data/repo-weights.csv', 'rb') as edgefile:
             weight=float(edge['weight']))
 
 print g.summary()
+
+writer = csv.writer(open('descriptions/description_map.csv', 'wb'))
+for key, value in description_map.items():
+   writer.writerow([key, value])
+
 #communities = g.community_fastgreedy()
 #optimal_number =  communities.optimal_count
 
