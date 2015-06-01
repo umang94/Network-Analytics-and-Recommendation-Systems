@@ -93,9 +93,17 @@ def recommender(developer_username, language):
     return json.dumps(suggestions)
 
 def main():
-    input_developer = sys.argv[2]
-    input_language = sys.argv[4]
-    print recommender(sys.argv[2],sys.argv[4].capitalize())
+    first_arg = sys.argv[1]
+    if first_arg == '-t':
+        language = sys.argv[2].capitalize()
+        developer_graph = load_graph(language)
+        print ranked_suggestions(developer_graph,20)
+    elif first_arg == '-u':
+        input_developer = sys.argv[2]
+        input_language = sys.argv[4]
+        print recommender(sys.argv[2],sys.argv[4].capitalize())
+    else :
+        return [None]
 
 main()
 
@@ -104,6 +112,10 @@ main()
     python dev_recommender.py -u vikhyat -l Ruby
     python dev_recommender.py -u Fronx -l JavaScript
     python dev_recommender.py -u Liang -l C++
+
+    For querying the top repositories
+
+    python dev_recommender.py -t Python
 
 """
 
