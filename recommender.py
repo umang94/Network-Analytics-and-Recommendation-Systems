@@ -10,8 +10,9 @@ def load_description(filename):
 global description_map 
 description_map = load_description('descriptions/description_map.csv')
 
-def load_graph(filename):
-    g = igraph.read(filename)
+def load_graph(language):
+    language_file = "/Users/umang/Desktop/MTP/Code/Communities/" + language + ".gml"
+    g = igraph.read(language_file)
     return g
 
 def test():
@@ -71,8 +72,7 @@ def make_json(suggestions):
 def recommender(query_repository , language):
     
     #Loading the given language file
-    language_file = "/Users/umang/Desktop/MTP/Code/Communities/" + language + ".gml"
-    language_graph = load_graph(language_file)
+    language_graph = load_graph(language)
 
     #Searching the given repository in the logs
     root_node = search_node(query_repository, language_graph)
@@ -97,9 +97,16 @@ def recommender(query_repository , language):
 
 def main():
     # python recommender.py -r pydata/pandas -l Python
-    input_repository = sys.argv[2]
-    input_language = sys.argv[4]
-    print recommender(sys.argv[2], sys.argv[4].capitalize())
+    first_arg = sys.argv[1]
+    if first_arg == '-t':
+        language_graph = load_graph(sys.argv[2].capitalize())
+        print far_off_suggestions(language_graph,10)
+    elif first_arg == '-r':
+        input_repository = sys.argv[2]
+        input_language = sys.argv[4]
+        print recommender(sys.argv[2], sys.argv[4].capitalize())
+    else:
+        return [None]
 
 main()
 
@@ -109,4 +116,6 @@ main()
     python recommender.py -r pydata/pandas -l python
     python recommender.py -r facebook/folly -l c++
     python recommender.py -r facebook/hhvm -l C++ 
+
+    python recommender.py -t python
 """
