@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Project Recommendations</title>
+    <title> Trending Developers </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -20,26 +20,23 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Github Project Recommendations</a>
+          <a class="navbar-brand" href="#">Github Trending Developers</a>
         </div>
       </div>
     </div>
 
     <div class="container">
       <div class="my-body">
-	<p class="lead"> Please enter the language you are interested in and the GitHub ID of an existing project that you have worked upon previously or would like to find projects similar to. An example query has already been filled for you</p>
+	      <p class="lead"> The <mark>Trends</mark> are calculated based rankings obtained after applying Page Rank algorithm to the Collaboration Network of the Developers. Please enter the programming language of which you want to find the most popular developers. </p>
+
 	<form class="form-inline">
 	  <div class="form-group">
 	    <label for="language">Language</label>
-	    <input type="text" class="form-control language" value="Python">
-	  </div>
-	  <div class="form-group" style="margin-left: 20px">
-	    <label for="language">Repository</label>
-	    <input type="text" class="form-control repository" value="pydata/pandas">
+	    <input type="text" class="form-control language" value="Ruby">
 	  </div>
 	  <button type="submit" class="btn btn-primary" style="margin-left: 40px">
 	    <i class="fa fa-spin fa-spinner"></i>
-	    Get Similar Projects
+	    Get Trends
     	  </button>
 	</form>
 
@@ -56,32 +53,28 @@
     <script src="/fetch.js"></script>
     <script>
       function recoTemplate(recoData) {
-	var reco = recoData[0].substr(19);
-	var recoURL = recoData[0];
-	return "<tr class='item'><td><a href='" + recoURL + "'>" + reco + "</a></td><td>" + recoData[1] + "</td></tr>";
+	      return "<tr class='item'><td>" + recoData[0] + "</td><td>" + recoData[1] + "</td><td><a href='https://" + recoData[2] + "'>" + recoData[2] + "</a></td></tr>";
       }
 
       $("form").submit(function() {
         $("button").attr('disabled', 'disabled');
-	var language = $(".language").val(),
-	    repository = $(".repository").val();
-	console.log("lang: " + language + ", repo: " + repository);
+	var language = $(".language").val();
+	console.log("lang: " + language);
 
-	fetch('/', {
+	fetch('/developers/trending', {
 	  method: 'post',
 	  headers: {
 	    'Accept': 'application/json',
 	    'Content-Type': 'application/json'
 	  },
           body: JSON.stringify({
-	    language: language,
-	    repository: repository
+	    language: language
 	  })
 	}).then(function(response) {
 	  response.json().then(function(json) {
 	    $("button").attr('disabled', false);
 	    $(".recommendations").html("");
-	    $(".recommendations").append("<tr><th>GitHub Repository</th><th> Description</th></tr>");
+	    $(".recommendations").append("<tr><th>Name</th> <th> Contact </th> <th> Profile Link </th> </tr>");
 	    json.forEach(function(recoData) {
 	      $(".recommendations").append(recoTemplate(recoData));
             });

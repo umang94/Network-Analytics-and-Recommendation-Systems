@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Network Analytics and Recommendation Systems for GitHub</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <style type="text/css">
+      body { padding-top: 50px; }
+      .my-body { padding: 40px 15px; }
+      i.fa-spin { display: none; }
+      button[disabled] i.fa-spin { display: inline; }
+      /*.item { margin: 8px; display: inline-block; }
+      .item a { padding: 8px; line-height: 25px; background: #eee; border-radius: 3px; }
+      .recommendations { text-align: center; }*/
+    </style>
+  </head>
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Network Analytics and Recommendation Systems for GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="my-body">
+	      <blockquote class=blockquote-reverse>
+  <p> Recommending projects to developers and developers to recruiters </p>
+</blockquote>
+
+<p class="lead"> We construct <mark> Collaboration Network </mark> of the projects on GitHub to recommend new projects to developers seeking out for them. We also construct a <mark>Collaboration Network</mark> of the active developers on GitHub to figure out similar developers. </p>
+<br>
+<p class="lead"> Here are the links to the two <mark>Recommendation Engines </mark></p>
+<ul class="list inline">
+<a class="btn btn-primary" href="/" role="button">Project Recommendations</a>
+<a class="btn btn-primary" href="/developers.html" role="button">Developer Recommendations</a>
+</ul>
+<br><br><br>
+<p class="lead">
+A part of building the Recommendation Engine involved extracting the most popular projects and most popular developers on GitHub. This lets us monitor the <mark> Trends </mark> on most popular projects and developers  within different programming language communities. </p>
+<br>
+<p class="lead">
+Here are the links to the trend monitoring websites that we have built
+<ul class="list inline">
+<a class="btn btn-primary" href="/index_trending.html" role="button">Trending Projects</a>
+<a class="btn btn-primary" href="/developers_trending.html" role="button">Trending Developers</a>
+</ul>
+</p>
+
+
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/fetch.js"></script>
+
+  </body>
+</html>

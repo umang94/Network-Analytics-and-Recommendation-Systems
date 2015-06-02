@@ -29,11 +29,55 @@ app.post('/', function(req, res){
 		res.send(200, data);
 	});
 	python.stderr.on('data', function(data) { console.log("stderr: " + data); });
-	/*
-	python.on('close', function(code){
-		console.log("child process exited with code: " + code);
-		if(code !== 0){return res.send(500,code);}
-		return res.send(200, output)
-	});*/
 });
+
+app.post('/trending', function(req, res){
+	var language = req.body.language;
+        console.log("language: " + language);
+	var python = require('child_process').spawn('python', 
+		// Array of parameters for the command python
+		["/Users/umang/Desktop/MTP/Code/recommender.py",
+		"-t", language]
+		);
+	python.stdout.on('data', function(data) {
+		console.log('stdout: ' + data);
+		res.header('Content-Type', 'application/json');
+		res.send(200, data);
+	});
+	python.stderr.on('data', function(data) { console.log("stderr: " + data); });
+});
+
+app.post('/developers', function(req, res){
+	var language = req.body.language,
+	    user = req.body.user;
+        console.log("language: " + language + ", user: " + user);
+	var python = require('child_process').spawn('python', 
+		// Array of parameters for the command python
+		["/Users/umang/Desktop/MTP/Code/dev_recommender.py",
+		"-u", user, "-l", language]
+		);
+	python.stdout.on('data', function(data) {
+		console.log('stdout: ' + data);
+		res.header('Content-Type', 'application/json');
+		res.send(200, data);
+	});
+	python.stderr.on('data', function(data) { console.log("stderr: " + data); });
+});
+
+app.post('/developers/trending', function(req, res){
+	var language = req.body.language;
+        console.log("language: " + language);
+	var python = require('child_process').spawn('python', 
+		// Array of parameters for the command python
+		["/Users/umang/Desktop/MTP/Code/dev_recommender.py",
+		"-t", language]
+		);
+	python.stdout.on('data', function(data) {
+		console.log('stdout: ' + data);
+		res.header('Content-Type', 'application/json');
+		res.send(200, data);
+	});
+	python.stderr.on('data', function(data) { console.log("stderr: " + data); });
+});
+
 app.listen(8888);

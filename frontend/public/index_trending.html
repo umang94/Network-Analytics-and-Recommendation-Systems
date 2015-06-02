@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Project Recommendations</title>
+    <title> Trending Projects </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -20,26 +20,22 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Github Project Recommendations</a>
+          <a class="navbar-brand" href="#">Github Trending Repositories</a>
         </div>
       </div>
     </div>
 
     <div class="container">
       <div class="my-body">
-	<p class="lead"> Please enter the language you are interested in and the GitHub ID of an existing project that you have worked upon previously or would like to find projects similar to. An example query has already been filled for you</p>
+	      <p class="lead"> The <mark>Trends</mark> are calculated based rankings obtained after applying Page Rank algorithm to the Collaboration Network of the Projects. Please enter the programming language in which you want to find the most popular projects in. </p>
 	<form class="form-inline">
 	  <div class="form-group">
 	    <label for="language">Language</label>
 	    <input type="text" class="form-control language" value="Python">
 	  </div>
-	  <div class="form-group" style="margin-left: 20px">
-	    <label for="language">Repository</label>
-	    <input type="text" class="form-control repository" value="pydata/pandas">
-	  </div>
 	  <button type="submit" class="btn btn-primary" style="margin-left: 40px">
 	    <i class="fa fa-spin fa-spinner"></i>
-	    Get Similar Projects
+	    Get Trends 
     	  </button>
 	</form>
 
@@ -67,15 +63,14 @@
 	    repository = $(".repository").val();
 	console.log("lang: " + language + ", repo: " + repository);
 
-	fetch('/', {
+	fetch('/trending', {
 	  method: 'post',
 	  headers: {
 	    'Accept': 'application/json',
 	    'Content-Type': 'application/json'
 	  },
           body: JSON.stringify({
-	    language: language,
-	    repository: repository
+	    language: language
 	  })
 	}).then(function(response) {
 	  response.json().then(function(json) {
