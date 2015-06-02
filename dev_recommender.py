@@ -66,7 +66,7 @@ def recommender(developer_username, language):
     developer_graph = load_graph(language) 
     root_node = search_node(developer_username,developer_graph)
     if root_node is None:
-        return ranked_suggestions(developer_graph,10) + independent_suggestions(developer_graph,10)
+        return json.dumps(ranked_suggestions(developer_graph,10) + independent_suggestions(developer_graph,10))
         #Adding a mixture of independent and ranked suggestions here 
 
     #Order 2 neighborhood recommendation
@@ -97,7 +97,7 @@ def main():
     if first_arg == '-t':
         language = sys.argv[2].capitalize()
         developer_graph = load_graph(language)
-        print ranked_suggestions(developer_graph,20)
+        print json.dumps(ranked_suggestions(developer_graph,20))
     elif first_arg == '-u':
         input_developer = sys.argv[2]
         input_language = sys.argv[4]

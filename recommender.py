@@ -8,7 +8,7 @@ def load_description(filename):
     return description_map
 
 global description_map 
-description_map = load_description('descriptions/description_map.csv')
+description_map = load_description('/Users/umang/Desktop/MTP/Code/descriptions/description_map.csv')
 
 def load_graph(language):
     language_file = "/Users/umang/Desktop/MTP/Code/Communities/" + language + ".gml"
@@ -100,7 +100,7 @@ def main():
     first_arg = sys.argv[1]
     if first_arg == '-t':
         language_graph = load_graph(sys.argv[2].capitalize())
-        print far_off_suggestions(language_graph,10)
+        print json.dumps(far_off_suggestions(language_graph,10))
     elif first_arg == '-r':
         input_repository = sys.argv[2]
         input_language = sys.argv[4]
