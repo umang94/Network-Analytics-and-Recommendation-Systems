@@ -9,7 +9,6 @@ The project has two modules :
 	* Recommendation Engine for Similar Developers
 
 ##Overview of the Recommendation Engine
----
 
 The data is mined from [GitHub Archive](http://githubarvhive.org). The data is then loaded on to [Google BigQuery](https://bigquery.cloud.google.com). SQL queries are used to extract the Network Graph data like nodes and edges. In case of the Collaboration Network of Projects, every Project is a node in the graph and the edges and their weights between any two nodes are calculated based on the contributions of the common developers between the two nodes. Similarly in case of the Collaboration Network of the Developers, the nodes are individual developers and the edges between any two nodes is calculated by considering the common repositories the two developers have worked on together. The contribution of a single common developer to the edge weight between two project nodes is given by the under-root of the product of the individual contribution made my the developer to both the projects separately. The individual contribution of a developer to a given repository is determined by the number of commits he has made to that repository. The processed under-root values are then summed up over the set of all common developers between two nodes to arrive at the final edge weight between the nodes in consideration. 
 
@@ -39,4 +38,35 @@ The recommendations then contain only the Independent Suggestions and Popular Su
 * Plotting : [R](http://cran.r-project.org/) , [gephi](http://www.github.gephi.io)
 * Website : [Node.js](http://nodejs.org) , [Bootstrap](http://www.getbootstrap.com)
 
+### Installation
 
+The installation has to be done manually right now. 
+
+* Install [Python](https://www.python.org) 
+* Install [Igraph](http://igraph.org/python/doc/tutorial/install.html)
+* Install [R](http://cran.r-project.org/)
+* Install [Node.js](http://nodejs.org)
+* Modify recommender.py , dev_recommender.py , make_graph.py, make_dev_graph.py to change the absolute address of the directories
+
+### Running Instructions 
+
+Some sample examples have been shown as below
+
+For getting recommendations for similar projects 
+
+    $ python recommender.py -r pydata/pandas -l python
+    $ python recommender.py -r facebook/folly -l c++
+    $ python recommender.py -r facebook/hhvm -l C++
+
+For getting the trending repositories for a language
+
+    $ python recommender.py -t python
+
+For getting recommendations for similar developers
+
+    $ python dev_recommender.py -u Fronx -l JavaScript
+    $ python dev_recommender.py -u Liang -l C++
+
+For getting the trending developers in a language community
+
+    $ python dev_recommender.py -t Python
