@@ -70,3 +70,10 @@ For getting recommendations for similar developers
 For getting the trending developers in a language community
 
     $ python dev_recommender.py -t Python
+
+### Web Interface 
+
+We have also set up a basic Node.js based website for the ease of usage and bypassing the command line instructions. The website can be reached at https://localhost:8888/ after initialising the server. The website files are located in the frontend/ folder and the server can be started as follows
+
+	$ cd frontend
+	$ node server.js
